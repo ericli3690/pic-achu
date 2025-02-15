@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Platform, Alert, Button, TextInput, Text } from 'react-native';
 import React, { useEffect } from 'react';
-import { Card } from '@/components/card';
+import { card } from '@/components/card';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
