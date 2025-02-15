@@ -14,12 +14,12 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors['light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: () => <LinearGradient colors={['#E1D9D1', '#E1D9D1']} style={{flex: 1}} />,

@@ -99,8 +99,12 @@ export default function AddCardScreen() {
           title="Add Image"
           onPress={pickImage}
         />
-    <Image source={{uri: file !=="" ? file : undefined }}
-                        style={styles.image} />
+        
+    
+        { file  !== "" && <Image source={{uri: file}}
+        style={styles.image} />}
+    
+    
     <TextInput
           style={styles.input}
           onChangeText={onChangeCardDesc}
@@ -227,6 +231,8 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         textAlign: 'center',
+        fontFamily: 'Chalkboard SE',
+    color: '#636363',
     },
     background: {
         flex: 1,
@@ -263,6 +269,7 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
         fontSize: 16,
         fontWeight: "bold",
+        
     },
     imageContainer: {
         borderRadius: 8,
@@ -287,7 +294,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     gap: 8,
-    fontFamily: "Times New Roman",
+    fontFamily: 'Chalkboard SE',
+    color: '#636363',
   },
   stepContainer: {
     gap: 8,
@@ -304,5 +312,7 @@ const styles = StyleSheet.create({
     height: 40,
     margin: 12,
     borderWidth: 1,
+    fontFamily: 'Chalkboard SE',
+    
   }
 });
