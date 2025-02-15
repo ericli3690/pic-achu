@@ -74,7 +74,7 @@ export default function AddCardScreen() {
 
 
   return (
-    <LinearGradient colors={['#F2D2BD', '#fff4ef', '#fff2d8']} style={styles.background}>
+    <LinearGradient colors={[ '#fff2d8','#F2D2BD']} style={styles.background}>
 
     <ScrollView
         style={styles.screen}
