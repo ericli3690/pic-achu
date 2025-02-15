@@ -1,29 +1,54 @@
 import { useState } from 'react';
 
-export function Card() {
+export type card = {
+    title: string,
+    description: string,
+    health: number,
+    imgString: string,
+    cost: string,
+    move1: {
+        cost: number,
+        description: string,
+        effect: number,
+        title: string,
+        type: string
+    },
+    move2: {
+        cost: number,
+        description: string,
+        effect: number,
+        title: string,
+        type: string
+    },
+    owner: string,
+    position: 'n/a' | 'deck' | 'hand' | 'board' | 'discord'  // Using union type for specific values
+}
+
+export function CardStorage() {
   // State to store the card data
-  const [cardData, setCardData] = useState([
+  const [cardData, setCardData] = useState<card[]>([
     {
         title: 'title',
         description: 'description',
         health: 100,
         imgString: 'https://via.placeholder.com/150',
+        cost: '10',
         move1: {
             cost: 10,
-            description: 'Move 1 Description',
+            description: 'description',
             effect: 20,
-            title: 'Move 1 Title',
-            type: 'Move 1 type',
+            title: 'title',
+            type: 'type'
         },
         move2: {
             cost: 10,
-            description: 'Move 2 Description',
+            description: 'description',
             effect: 20,
-            title: 'Move 2 Title',
-            type: 'Move 2 type',
+            title: 'title',
+            type: 'type'
         },
         owner: 'owner',
-        position: 'n/a', // n/a, deck, hand, board, discard
+        position: 'n/a'
     },
   ]);
 
@@ -32,7 +57,7 @@ export function Card() {
     return cardData[index];
   };
 
-  // setter (double check this)
+  // setter (double check this, smt smt firebase)
   const updateCardData = (index: number, newCardData: typeof cardData[number]) => {
     setCardData(prevData => {
       const newData = [...prevData];
