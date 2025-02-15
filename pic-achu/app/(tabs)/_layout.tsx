@@ -8,6 +8,9 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
@@ -37,21 +40,21 @@ export default function TabLayout() {
         name="battle_screen"
         options={{
           title: 'Battle',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="sword-cross" size={24} color={color} />,
         }}
       />
       <Tabs.Screen
         name="add_card_screen"
         options={{
           title: 'Add Card',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="mirror-rectangle" color={color} />,
         }}
       />
       <Tabs.Screen
         name="settings_screen"
         options={{
           title: 'Settings',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="gear" color={color} />,
         }}
       />
     </Tabs>

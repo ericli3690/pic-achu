@@ -1,6 +1,8 @@
-import { Image, StyleSheet, Platform, Alert, Button, TextInput, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Platform, Alert, Button, TextInput, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { card, CardStorage } from '@/components/card';
+import { LinearGradient } from "expo-linear-gradient";
+import { Animated } from "react-native";
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -33,6 +35,8 @@ export default function AddCardScreen() {
     const [file, setFile] = useState("");
 
     const [error, setError] = useState(null);
+
+    const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
     
     useEffect(() => {onChangeMoveCost1((+MovePower1)/2);}, [MovePower1]);
     useEffect(() => {onChangeMoveCost2((+MovePower2)/2);}, [MovePower2]);
@@ -70,18 +74,20 @@ export default function AddCardScreen() {
 
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
+    <LinearGradient colors={['#F2D2BD', '#fff4ef', '#fff2d8']} style={styles.background}>
 
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Add Card</ThemedText>
-    </ThemedView>
+    <ScrollView
+        style={styles.screen}
+      >
+
+    <Text>
+    {'\n'}
+    {'\n'}
+    </Text>
+
+      
+    <ThemedText type="title" style={styles.titleContainer}>Make Card</ThemedText>
+    
     
     <TextInput
           style={styles.input}
@@ -127,7 +133,7 @@ export default function AddCardScreen() {
           value={MovePower1}
           placeholder='Move 1 Power'
         />
-    <Text>
+    <Text style={styles.text}>
         Move 1 Cost: {MoveCost1}
     </Text>
 
@@ -152,7 +158,7 @@ export default function AddCardScreen() {
           placeholder='Move 2 Power'
         />
 
-    <Text>
+    <Text style={styles.text}>
         Move 2 Cost: {MoveCost2}
     </Text>
 
@@ -205,14 +211,33 @@ export default function AddCardScreen() {
 
         }}/>
 
+    <AnimatedLinearGradient
+    colors={["rgba(255,255,255, 0)", "rgba(255,255,255, 1)"]}
+    />
 
         
       
-    </ParallaxScrollView>
+    </ScrollView>
+    </LinearGradient>
+    
   );
 }
 
 const styles = StyleSheet.create({
+    text: {
+        fontSize: 20,
+        textAlign: 'center',
+    },
+    background: {
+        flex: 1,
+
+    },
+    screen: {
+        flex: 1,
+    
+        marginBottom: 80,
+  
+    },
     container: {
         flex: 1,
         justifyContent: "center",
@@ -260,7 +285,9 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    textAlign: 'center',
     gap: 8,
+    fontFamily: "Times New Roman",
   },
   stepContainer: {
     gap: 8,
