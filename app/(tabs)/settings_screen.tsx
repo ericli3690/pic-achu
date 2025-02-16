@@ -10,6 +10,8 @@ import { app } from '@/scripts/firebase';
 import { initializeAuth, getReactNativePersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import userInfo from '@/scripts/user-info.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getGroupID, setGroupID } from '@/scripts/group';
 
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
@@ -20,9 +22,16 @@ export default function SettingsScreen() {
   const [isNewUser, setIsNewUser] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [groupText, setGroupText] = useState(userInfo.group);
 
+  const [groupText, setGroupText] = useState("");
   const [currUser, setCurrentUser] = useState(auth.currentUser);
+
+  useEffect(() => {
+    (async () => {
+      const id = await getGroupID();
+      setGroupText(id || "");
+    })();
+  }, []);
 
   return (
     <ParallaxScrollView
@@ -47,7 +56,7 @@ export default function SettingsScreen() {
             value={groupText}
             placeholder='Enter Group ID'
           />
-          <Button title="Join Group" onPress={() => {userInfo.group = groupText}} />
+          <Button title="Join Group" onPress={async () => {await setGroupID(groupText)}} />
           <Button title="Log Out" onPress={() => {
             signOut(auth).then(() => {
               setCurrentUser(null);
