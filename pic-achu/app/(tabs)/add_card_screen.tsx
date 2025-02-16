@@ -100,6 +100,7 @@ export default function AddCardScreen() {
           onPress={pickImage}
         />
         
+        
     
         { file  !== "" && <Image source={{uri: file}}
         style={styles.image} />}
