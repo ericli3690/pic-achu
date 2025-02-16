@@ -36,7 +36,7 @@ export default function HomeScreen() {
 
 
         
-        {Object.keys(cardData).length != 0 && <DisplayCard currentCard={cardData} cardWidth={200}/>}
+        {Object.keys(cardData).length != 0 && <DisplayCard currentCard={cardData} cardWidth={200} leftLocation={10} topLocation={10}/>}
         
 
         <Button title="Change Deck" onPress= {() => {Alert.alert('hi')}} />

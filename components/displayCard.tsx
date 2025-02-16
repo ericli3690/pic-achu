@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, View, Image, StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import { card, CardStorage } from '@/components/card';
 
-export function DisplayCard({currentCard={}, cardWidth}: any) { 
+export function DisplayCard({currentCard={}, cardWidth, leftLocation, topLocation}: any) { 
   let cardHeight=cardWidth*1.39473684;
     return (
   
@@ -11,6 +11,8 @@ export function DisplayCard({currentCard={}, cardWidth}: any) {
       style={{
         width: cardWidth,
         height: cardHeight,
+        marginLeft: leftLocation,
+        marginTop: topLocation
       }}
       imageStyle={{ borderRadius: 10}}>
         
