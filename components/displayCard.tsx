@@ -3,9 +3,9 @@ import { Text, View, Image, StyleSheet, ScrollView, ImageBackground } from 'reac
 import { card, CardStorage } from '@/components/card';
 
 export function DisplayCard({currentCard={}, cardWidth}: any) { 
-  let cardHeight=cardWidth*1.48528012
+  let cardHeight=cardWidth*1.48528012;
     return (
-      
+  
       <ImageBackground
       source = {require('../assets/images/card_template.jpg')}
       style={{
@@ -50,10 +50,10 @@ export function DisplayCard({currentCard={}, cardWidth}: any) {
           {currentCard.move1['description']}
         </Text>
         
-      
+ 
       
     
-      </ImageBackground>
+      </ImageBackground>    
     );
   }
   

@@ -17,7 +17,7 @@ export default function HomeScreen() {
     health: 5, 
     imgString: "placeholder", 
     cost: '4', 
-    move1: { cost: 3, description: 'move1asdasdabdsjhasdhavsjdhvasjdvajdshvajhsdvajhvsdajvdsaj', effect: 6, title: 'move1name', type: 'damage' }, 
+    move1: { cost: 3, description: 'move1arrsdasdabdsjhasdhavsjdhvasjdvajdshvajhsdvajhvsdajvdsaj', effect: 6, title: 'move1name', type: 'damage' }, 
     move2: { cost: 4, description: 'move2', effect: 8, title: 'move2name', type: 'damage' }, 
     owner: 'owner',
     position: 'n/a' });
@@ -32,20 +32,20 @@ export default function HomeScreen() {
           {'\n'}
           </Text>
  
-        <ThemedText type="title" style={styles.titleContainer}>My Deck</ThemedText>
+        <Text style={styles.titleContainer}>My Deck</Text>
 
 
         
-        {Object.keys(cardData).length && <DisplayCard currentCard={cardData} cardWidth={200}/>}
+        {Object.keys(cardData).length != 0 && <DisplayCard currentCard={cardData} cardWidth={200}/>}
         
 
         <Button title="Change Deck" onPress= {() => {Alert.alert('hi')}} />
       
-      <ThemedText type="title" style={styles.titleContainer}>Group Cards</ThemedText>
+      <Text style={styles.titleContainer}>Group Cards</Text>
       
     </ScrollView>
     </LinearGradient>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
