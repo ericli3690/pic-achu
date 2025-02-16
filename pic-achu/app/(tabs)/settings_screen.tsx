@@ -1,11 +1,29 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Image, StyleSheet, Platform, Button, Alert, TextInput, Text } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
+import { app } from '@/scripts/firebase';
+import { initializeAuth, getReactNativePersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import userInfo from '@/scripts/user-info.js';
+
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+});
+
 export default function SettingsScreen() {
+
+  const [isNewUser, setIsNewUser] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [groupText, setGroupText] = useState(userInfo.group);
+
+  const [currUser, setCurrentUser] = useState(auth.currentUser);
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -16,40 +34,64 @@ export default function SettingsScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
+        <ThemedText type="title">Settings</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
+      {
+        (currUser != null) ?
+        <>
+          <Text>Current User: {currUser.email}</Text>
+          <ThemedText type="title">Join a Group:</ThemedText>
+          <TextInput
+            style={styles.input}
+            onChangeText={setGroupText}
+            value={groupText}
+            placeholder='Enter Group ID'
+          />
+          <Button title="Join Group" onPress={() => {userInfo.group = groupText}} />
+          <Button title="Log Out" onPress={() => {
+            signOut(auth).then(() => {
+              setCurrentUser(null);
+            }).catch((error) => {
+              Alert.alert("Oops: " + error);
+            })
+          }} />
+        </>
+        :
+        <>
+          <ThemedText type="title">{isNewUser ? "Sign Up" : "Log In"}</ThemedText>
+          <Button title={(isNewUser ? "Log In" : "Sign Up") + " Instead"} onPress={() => {setIsNewUser(!isNewUser)}} />
+          <TextInput
+            style={styles.input}
+            onChangeText={setUsername}
+            value={username}
+            placeholder='Enter Your Username'
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={setPassword}
+            value={password}
+            secureTextEntry={true}
+            placeholder='Enter Your Password'
+          />
+          <Button title={isNewUser ? "Sign Up" : "Log In"} onPress={() => {
+            if (isNewUser) {
+              createUserWithEmailAndPassword(auth, username, password)
+                .then((userCredential) => {
+                  setCurrentUser(userCredential.user);
+                }).catch((error) => {
+                    Alert.alert("Oops: " + error);
+                });
+            } else {
+              signInWithEmailAndPassword(auth, username, password)
+                .then((userCredential) => {
+                  setCurrentUser(userCredential.user);
+                }).catch((error) => {
+                    Alert.alert("Oops: " + error);
+                });
+            }
+          }} />
+        </>
+      }
     </ParallaxScrollView>
   );
 }
@@ -71,4 +113,9 @@ const styles = StyleSheet.create({
     left: 0,
     position: 'absolute',
   },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+  }
 });

@@ -1,6 +1,8 @@
-import { Image, StyleSheet, Platform, Alert, Button, TextInput, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Platform, Alert, Button, TextInput, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { card, CardStorage } from '@/components/card';
+import { LinearGradient } from "expo-linear-gradient";
+import { Animated } from "react-native";
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -33,6 +35,8 @@ export default function AddCardScreen() {
     const [file, setFile] = useState("");
 
     const [error, setError] = useState(null);
+
+    const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
     
     useEffect(() => {onChangeMoveCost1((+MovePower1)/2);}, [MovePower1]);
     useEffect(() => {onChangeMoveCost2((+MovePower2)/2);}, [MovePower2]);
@@ -70,36 +74,45 @@ export default function AddCardScreen() {
 
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
+    <LinearGradient colors={[ '#fff2d8','#F2D2BD']} style={styles.background}>
 
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Add Card</ThemedText>
-    </ThemedView>
+    <ScrollView
+        style={styles.screen}
+      >
+
+    <Text>
+    {'\n'}
+    {'\n'}
+    </Text>
+
+      
+    <ThemedText type="title" style={styles.titleContainer}>Make Card</ThemedText>
+    
     
     <TextInput
           style={styles.input}
           onChangeText={onChangeCardName}
           value={CardName}
           placeholder='Enter Card Name'
+          placeholderTextColor='#999999'
         />
     <Button
           title="Add Image"
           onPress={pickImage}
         />
-    <Image source={{uri: file !=="" ? file : undefined }}
-                        style={styles.image} />
+        
+        
+    
+        { file  !== "" && <Image source={{uri: file}}
+        style={styles.image} />}
+    
+    
     <TextInput
           style={styles.input}
           onChangeText={onChangeCardDesc}
           value={CardDesc}
           placeholder='Enter Card Description'
+          placeholderTextColor='#999999'
         />
     <TextInput
           style={styles.input}
@@ -107,18 +120,21 @@ export default function AddCardScreen() {
           keyboardType='numeric'
           value={CardHealth}
           placeholder='Health'
+          placeholderTextColor='#999999'
         />
     <TextInput
           style={styles.input}
           onChangeText={onChangeMoveName1}
           value={MoveName1}
           placeholder='Move 1 Name'
+          placeholderTextColor='#999999'
         />
     <TextInput
           style={styles.input}
           onChangeText={onChangeMoveDesc1}
           value={MoveDesc1}
           placeholder='Move 1 Description'
+          placeholderTextColor='#999999'
         />
     <TextInput
           style={styles.input}
@@ -126,8 +142,9 @@ export default function AddCardScreen() {
           keyboardType='numeric'
           value={MovePower1}
           placeholder='Move 1 Power'
+          placeholderTextColor='#999999'
         />
-    <Text>
+    <Text style={styles.text}>
         Move 1 Cost: {MoveCost1}
     </Text>
 
@@ -136,6 +153,7 @@ export default function AddCardScreen() {
           onChangeText={onChangeMoveName2}
           value={MoveName2}
           placeholder='Move 2 Name'
+          placeholderTextColor='#999999'
         />
     
     <TextInput
@@ -143,6 +161,7 @@ export default function AddCardScreen() {
           onChangeText={onChangeMoveDesc2}
           value={MoveDesc2}
           placeholder='Move 2 Description'
+          placeholderTextColor='#999999'
         />
     <TextInput
           style={styles.input}
@@ -150,9 +169,10 @@ export default function AddCardScreen() {
           keyboardType='numeric'
           value={MovePower2}
           placeholder='Move 2 Power'
+          placeholderTextColor='#999999'
         />
 
-    <Text>
+    <Text style={styles.text}>
         Move 2 Cost: {MoveCost2}
     </Text>
 
@@ -205,14 +225,35 @@ export default function AddCardScreen() {
 
         }}/>
 
+    <AnimatedLinearGradient
+    colors={["rgba(255,255,255, 0)", "rgba(255,255,255, 1)"]}
+    />
 
         
       
-    </ParallaxScrollView>
+    </ScrollView>
+    </LinearGradient>
+    
   );
 }
 
 const styles = StyleSheet.create({
+    text: {
+        fontSize: 20,
+        textAlign: 'center',
+        fontFamily: 'Chalkboard SE',
+    color: '#636363',
+    },
+    background: {
+        flex: 1,
+
+    },
+    screen: {
+        flex: 1,
+    
+        marginBottom: 80,
+  
+    },
     container: {
         flex: 1,
         justifyContent: "center",
@@ -238,6 +279,7 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
         fontSize: 16,
         fontWeight: "bold",
+        
     },
     imageContainer: {
         borderRadius: 8,
@@ -260,7 +302,10 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    textAlign: 'center',
     gap: 8,
+    fontFamily: 'Chalkboard SE',
+    color: '#636363',
   },
   stepContainer: {
     gap: 8,
@@ -277,5 +322,8 @@ const styles = StyleSheet.create({
     height: 40,
     margin: 12,
     borderWidth: 1,
+    borderRadius: 8,
+    fontFamily: 'Chalkboard SE',
+    
   }
 });
