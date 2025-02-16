@@ -12,27 +12,10 @@ import * as ImagePicker from "expo-image-picker";
 
 
 
-
-
 export default function AddCardScreen() {
     const [CardName, onChangeCardName] = React.useState("");
-    const [CardHealth, onChangeCardHealth] = React.useState("");
     const [CardDesc, onChangeCardDesc] = React.useState("");
-    const [CardCost, onChangeCardCost] = React.useState("");
-    const [MoveName1, onChangeMoveName1] = React.useState("");
-    const [MoveName2, onChangeMoveName2] = React.useState("");
-    const [MoveDesc1, onChangeMoveDesc1] = React.useState("");
-    const [MoveDesc2, onChangeMoveDesc2] = React.useState("");
-    const [MoveType1, onChangeMoveType1] = React.useState("");
-    const [MoveType2, onChangeMoveType2] = React.useState("");
-    const [MovePower1, onChangeMovePower1] = React.useState("");
-    const [MovePower2, onChangeMovePower2] = React.useState("");
-    const [MoveCost1, onChangeMoveCost1] = React.useState(0);
-    const [MoveCost2, onChangeMoveCost2] = React.useState(0);
 
-    const [Card, SetCardData] = React.useState<card[]>([]);
-
-    const [file, setFile] = useState("");
 
     const [error, setError] = useState(null);
 
