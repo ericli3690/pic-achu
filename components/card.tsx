@@ -3,6 +3,7 @@ import { app, db } from '@/scripts/firebase';
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { ListRenderItem } from 'react-native';
+import { getGroupID } from '@/scripts/group.js';
 
 // card type skeleton
 export type card = {
@@ -30,7 +31,8 @@ export type card = {
 }
 
 export async function getCardsFromGroup(sample_text: string) {
-    const docRef = doc(db, 'allGroups', 'PqS0D76ildkvGidUCPpz');
+    const id = await getGroupID();
+    const docRef = doc(db, 'allGroups', id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
         return docSnap.data()['cards'];
@@ -44,7 +46,8 @@ export function CardStorage() {
 
 	useEffect(() => {
 		const fetchCards = async () => {
-			const storedCards = await getCardsFromGroup('PqS0D76ildkvGidUCPpz');
+            const id = await getGroupID();
+			const storedCards = await getCardsFromGroup(id);
 			setCardData(storedCards);
 		};
 
@@ -78,7 +81,8 @@ export function CardStorage() {
             // });
             // Update the card data in Firebase
             try {
-                const cardRef = doc(db, 'allGroups', 'PqS0D76ildkvGidUCPpz', 'cards', index.toString());
+                const id = await getGroupID();
+                const cardRef = doc(db, 'allGroups', id, 'cards', index.toString());
                 console.log('updating card data in firebase', newCardData);
                 await setDoc(cardRef, newCardData);
             } catch (error) {
