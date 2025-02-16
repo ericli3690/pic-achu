@@ -25,6 +25,7 @@ export type card = {
 		title: string,
 		type: string
 	},
+    owner: string,
 	position: 'n/a' | 'deck' | 'hand' | 'board' | 'discord'  // Using union type for specific values
 }
 

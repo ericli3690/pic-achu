@@ -204,7 +204,7 @@ export default function AddCardScreen() {
                     cost: CardCost, 
                     move1: { cost: +MoveCost1, description: MoveDesc1, effect: +MovePower1, title: MoveName1, type: MoveType1 }, 
                     move2: { cost: +MoveCost2, description: MoveDesc2, effect: +MovePower2, title: MoveName2, type: MoveType2 }, 
-                    owner: 'owner', 
+                    owner: 'owner',
                     position: 'n/a' }]);
 
                 Alert.alert('Card Created');
