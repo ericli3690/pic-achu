@@ -1,16 +1,14 @@
-import { CardStorage, type card } from './card';
+import { useEffect } from 'react';
+import { Text } from 'react-native';
 
-export function DisplayCard(currentCard: card) {
+export function DisplayCard(currentCard: any) { // Specify the type of currentCard
+    useEffect(() => {
+        console.log(currentCard['name'], 'aaaa');
+    }, []);
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <h1>{currentCard.title}</h1>
-            <p>{currentCard.description}</p>
-            <p>{currentCard.health}</p>
-            <p>{currentCard.imgString}</p>
-            <p>{currentCard.cost}</p>
-            <p>{currentCard.move1.cost}</p>
-            <p>{currentCard.move1.description}</p>
-            <p>{currentCard.move1.effect}</p>
-        </div>
+      <Text>
+        {currentCard['name']}
+      </Text>
     );
 }
+  
