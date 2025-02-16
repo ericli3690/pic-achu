@@ -6,10 +6,11 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-import { app } from '@/scripts/firebase';
-import { initializeAuth, getReactNativePersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { app, db } from '@/scripts/firebase';
+import { initializeAuth, getReactNativePersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
-import userInfo from '@/scripts/user-info.js';
+import { getGroupID, setGroupID } from '@/scripts/group';
+import { doc, setDoc } from 'firebase/firestore';
 
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
@@ -20,9 +21,22 @@ export default function SettingsScreen() {
   const [isNewUser, setIsNewUser] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [groupText, setGroupText] = useState(userInfo.group);
+  const [displayName, setDisplayName] = useState("");
+  const [joinGroupText, setJoinGroupText] = useState("");
+  const [newGroupText, setNewGroupText] = useState("");
 
-  const [currUser, setCurrentUser] = useState(auth.currentUser);
+  const [currGroup, setCurrGroup] = useState("");
+  const [currUser, setCurrUser] = useState(auth.currentUser);
+  const [update, setUpdate] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const id = await getGroupID();
+      setDisplayName((auth.currentUser && auth.currentUser.displayName) ? auth.currentUser.displayName : "");
+      setJoinGroupText(id || "");
+      setCurrGroup(id || "");
+    })();
+  }, [update]);
 
   return (
     <ParallaxScrollView
@@ -39,22 +53,62 @@ export default function SettingsScreen() {
       {
         (currUser != null) ?
         <>
-          <Text>Current User: {currUser.email}</Text>
+
+          <Text>Current User: {currUser.displayName}</Text>
+          <Text>Current User Email: {currUser.email}</Text>
+          <Text>Current Joined Group: {currGroup}</Text>
+
+          <ThemedText type="title">Change Username:</ThemedText>
+          <TextInput
+            style={styles.input}
+            onChangeText={setDisplayName}
+            value={displayName}
+            placeholder='Enter New Username'
+          />
+          <Button title="Update Username" onPress={async () => {
+            if (auth.currentUser) {
+              updateProfile(auth.currentUser, {
+                displayName: displayName,
+              }).then(() => {
+                setUpdate(!update);
+              }).catch((error) => {
+                Alert.alert("Oops: " + error);
+              });
+            }
+          }} />
+
           <ThemedText type="title">Join a Group:</ThemedText>
           <TextInput
             style={styles.input}
-            onChangeText={setGroupText}
-            value={groupText}
+            onChangeText={setJoinGroupText}
+            value={joinGroupText}
             placeholder='Enter Group ID'
           />
-          <Button title="Join Group" onPress={() => {userInfo.group = groupText}} />
+          <Button title="Join Group" onPress={async () => {
+            await setGroupID(joinGroupText);
+            setCurrGroup(joinGroupText);
+          }} />
+
+          <ThemedText type="title">Create a New Group:</ThemedText>
+          <TextInput
+            style={styles.input}
+            onChangeText={setNewGroupText}
+            value={newGroupText}
+            placeholder='Enter Group ID'
+          />
+          <Button title="Create Group" onPress={async () => {
+            await setGroupID(newGroupText);
+            setCurrGroup(newGroupText);
+          }} />
+
           <Button title="Log Out" onPress={() => {
             signOut(auth).then(() => {
-              setCurrentUser(null);
+              setCurrUser(null);
             }).catch((error) => {
               Alert.alert("Oops: " + error);
             })
           }} />
+
         </>
         :
         <>
@@ -77,14 +131,14 @@ export default function SettingsScreen() {
             if (isNewUser) {
               createUserWithEmailAndPassword(auth, username, password)
                 .then((userCredential) => {
-                  setCurrentUser(userCredential.user);
+                  setCurrUser(userCredential.user);
                 }).catch((error) => {
                     Alert.alert("Oops: " + error);
                 });
             } else {
               signInWithEmailAndPassword(auth, username, password)
                 .then((userCredential) => {
-                  setCurrentUser(userCredential.user);
+                  setCurrUser(userCredential.user);
                 }).catch((error) => {
                     Alert.alert("Oops: " + error);
                 });
