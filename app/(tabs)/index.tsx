@@ -15,7 +15,7 @@ export default function HomeScreen() {
   setCardData({ title: 'hi', 
     description: 'descasdaisgfaigfuaysgdyuasgdiuasdgsayudfauysfdiuafsd', 
     health: 5, 
-    imgString: "placeholder", 
+    imgRefs: ["AwgZm9Py6F4eMVFAQva3", "a4JOGbgXhDrlpjWnBwbT", "lWOOoThqBIxfZTrWbTQf", "UA5IeJbWCw7R6SeJIMjD"], 
     cost: '4', 
     move1: { cost: 3, description: 'move1arrsdasdabdsjhasdhavsjdhvasjdvajdshvajhsdvajhvsdajvdsaj', effect: 6, title: 'move1name', type: 'damage' }, 
     move2: { cost: 4, description: 'move2', effect: 8, title: 'move2name', type: 'damage' }, 
