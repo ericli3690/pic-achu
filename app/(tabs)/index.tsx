@@ -22,6 +22,8 @@ export default function HomeScreen() {
     owner: 'owner',
     position: 'n/a' });
   }, []);
+
+  
     
   return (
     <LinearGradient colors={['#90ee90', '#e6ffe6']} style={styles.background}>

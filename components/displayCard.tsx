@@ -24,7 +24,7 @@ export function DisplayCard({currentCard={}, cardWidth, leftLocation, topLocatio
         <View style={{flexDirection: 'row'}}>
 
         <Text style={{marginLeft: cardWidth/11, marginTop: cardHeight/22, fontFamily: 'Futura', fontSize: cardWidth/13, color: 'black', fontWeight: 'bold'}}>
-          {currentCard.title}
+          {currentCard['name']}
         </Text>
         <Text style={{flex: 1, marginRight: cardWidth/11, marginTop: cardHeight/20, textAlign:'right', fontFamily: 'Futura', fontSize: cardWidth/17, color: 'black'}}>
           {currentCard.health}

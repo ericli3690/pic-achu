@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Image, StyleSheet, Platform, Button, Alert, TextInput, Text } from 'react-native';
+import { Image, StyleSheet, Platform, Button, Alert, TextInput, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -34,40 +35,51 @@ export default function SettingsScreen() {
   }, []);
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Settings</ThemedText>
-      </ThemedView>
+    <LinearGradient colors={[ '#D3D3D3','#808080']} style={styles.background}>
+    <ScrollView>
+      <Text>
+        {'\n'}
+        {'\n'}
+      </Text>
+
+        <Text style={styles.titleContainer}>Settings
+          {'\n'}
+        </Text>
+
+
+ 
       {
         (currUser != null) ?
         <>
-          <Text>Current User: {currUser.email}</Text>
-          <ThemedText type="title">Join a Group:</ThemedText>
+          <Text style={styles.text}>Current User: {currUser.email}</Text>
+          <Text style={styles.loginContainer}>Join a Group:</Text>
           <TextInput
             style={styles.input}
             onChangeText={setGroupText}
             value={groupText}
             placeholder='Enter Group ID'
           />
-          <Button title="Join Group" onPress={async () => {await setGroupID(groupText)}} />
-          <Button title="Log Out" onPress={() => {
+          <TouchableOpacity onPress={async () => {await setGroupID(groupText)}} style={styles.ButtonContainer}>
+              <Text style={styles.text}>Join Group</Text>
+          </TouchableOpacity>
+          <Text>
+            {'\n'}
+          </Text>
+          <TouchableOpacity onPress={() => {
             signOut(auth).then(() => {
               setCurrentUser(null);
             }).catch((error) => {
               Alert.alert("Oops: " + error);
             })
-          }} />
+          }} style={styles.ButtonContainer}>
+              <Text style={styles.text}>Log Out</Text>
+          </TouchableOpacity>
+
+          
         </>
         :
         <>
-          <ThemedText type="title">{isNewUser ? "Sign Up" : "Log In"}</ThemedText>
+          <Text style={styles.loginContainer}>{isNewUser ? "Sign Up" : "Log In"}</Text>
           <Button title={(isNewUser ? "Log In" : "Sign Up") + " Instead"} onPress={() => {setIsNewUser(!isNewUser)}} />
           <TextInput
             style={styles.input}
@@ -101,30 +113,116 @@ export default function SettingsScreen() {
           }} />
         </>
       }
-    </ParallaxScrollView>
+    </ScrollView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  ButtonContainer:{
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginLeft: 50,
+    marginRight: 50,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  text: {
+      fontSize: 20,
+      textAlign: 'center',
+      fontFamily: 'Chalkboard SE',
+  color: '#999999',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  background: {
+      flex: 1,
+
   },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-  }
+  screen: {
+      flex: 1,
+  
+      marginBottom: 80,
+
+  },
+  container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 16,
+  },
+  header: {
+      fontSize: 20,
+      marginBottom: 16,
+  },
+  button: {
+      backgroundColor: "#2D923C",
+      padding: 10,
+      borderRadius: 8,
+      marginBottom: 16,
+      shadowColor: "#000000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.4,
+      shadowRadius: 4,
+      elevation: 5,
+  },
+  buttonText: {
+      color: "#FFFFFF",
+      fontSize: 16,
+      fontWeight: "bold",
+      
+  },
+  imageContainer: {
+      borderRadius: 8,
+      marginBottom: 16,
+      shadowColor: "#000000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.4,
+      shadowRadius: 4,
+      elevation: 5,
+  },
+  image: {
+      width: 158,
+      height: 117,
+      borderRadius: 8,
+  },
+  errorText: {
+      color: "red",
+      marginTop: 16,
+  },
+titleContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  textAlign: 'center',
+  fontSize:40,
+  fontFamily: 'Chalkboard SE',
+  color: '#111111',
+},
+loginContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  textAlign: 'center',
+  fontSize:30,
+  fontFamily: 'Chalkboard SE',
+  color: '#636363',
+},
+stepContainer: {
+  gap: 8,
+  marginBottom: 8,
+},
+reactLogo: {
+  height: 178,
+  width: 290,
+  bottom: 0,
+  left: 0,
+  position: 'absolute',
+},
+input: {
+  height: 40,
+  margin: 12,
+  borderWidth: 1,
+  borderRadius: 8,
+  fontFamily: 'Chalkboard SE',
+  
+},
+
 });
