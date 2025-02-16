@@ -94,6 +94,7 @@ export default function AddCardScreen() {
           onChangeText={onChangeCardName}
           value={CardName}
           placeholder='Enter Card Name'
+          placeholderTextColor='#999999'
         />
     <Button
           title="Add Image"
@@ -111,6 +112,7 @@ export default function AddCardScreen() {
           onChangeText={onChangeCardDesc}
           value={CardDesc}
           placeholder='Enter Card Description'
+          placeholderTextColor='#999999'
         />
     <TextInput
           style={styles.input}
@@ -118,18 +120,21 @@ export default function AddCardScreen() {
           keyboardType='numeric'
           value={CardHealth}
           placeholder='Health'
+          placeholderTextColor='#999999'
         />
     <TextInput
           style={styles.input}
           onChangeText={onChangeMoveName1}
           value={MoveName1}
           placeholder='Move 1 Name'
+          placeholderTextColor='#999999'
         />
     <TextInput
           style={styles.input}
           onChangeText={onChangeMoveDesc1}
           value={MoveDesc1}
           placeholder='Move 1 Description'
+          placeholderTextColor='#999999'
         />
     <TextInput
           style={styles.input}
@@ -137,6 +142,7 @@ export default function AddCardScreen() {
           keyboardType='numeric'
           value={MovePower1}
           placeholder='Move 1 Power'
+          placeholderTextColor='#999999'
         />
     <Text style={styles.text}>
         Move 1 Cost: {MoveCost1}
@@ -147,6 +153,7 @@ export default function AddCardScreen() {
           onChangeText={onChangeMoveName2}
           value={MoveName2}
           placeholder='Move 2 Name'
+          placeholderTextColor='#999999'
         />
     
     <TextInput
@@ -154,6 +161,7 @@ export default function AddCardScreen() {
           onChangeText={onChangeMoveDesc2}
           value={MoveDesc2}
           placeholder='Move 2 Description'
+          placeholderTextColor='#999999'
         />
     <TextInput
           style={styles.input}
@@ -161,6 +169,7 @@ export default function AddCardScreen() {
           keyboardType='numeric'
           value={MovePower2}
           placeholder='Move 2 Power'
+          placeholderTextColor='#999999'
         />
 
     <Text style={styles.text}>
@@ -313,6 +322,7 @@ const styles = StyleSheet.create({
     height: 40,
     margin: 12,
     borderWidth: 1,
+    borderRadius: 8,
     fontFamily: 'Chalkboard SE',
     
   }

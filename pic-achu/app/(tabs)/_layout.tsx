@@ -8,18 +8,19 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme} from '@/hooks/useColorScheme';
 
+
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function TabLayout() {
-  
+  const colorScheme = useColorScheme();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors['light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: () => <LinearGradient colors={['#E1D9D1', '#E1D9D1']} style={{flex: 1}} />,
