@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { app, db } from '@/scripts/firebase';
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
-import { ListRenderItem } from 'react-native';
+import { Alert, ListRenderItem } from 'react-native';
 import { getGroupID } from '@/scripts/group.js';
 
 export async function getCardsFromGroup(group_id: string) {
@@ -20,13 +20,19 @@ export async function updateCardData(card_name: string, newCardData: any) {
     try {
         const docRef = doc(db, 'allGroups', await getGroupID());
         const docSnap = await getDoc(docRef);
-        const currentCards = docSnap.data()?.cards;
-        console.log(currentCards, 'cardRef');
+        let docData = docSnap.data() || {};
+        let currentCards = docData.cards;
         if (currentCards) {
             currentCards[card_name] = newCardData;
-            await setDoc(docRef, { cards: currentCards });
+            docData.cards = currentCards;
+            await setDoc(docRef, docData);
         } else {
-            console.log('No current cards found to update.');
+            console.log("right branch");
+            docData = {
+                cards: {}
+            }
+            docData.cards[card_name] = newCardData;
+            await setDoc(docRef, docData);
         }
         console.log('updating card data in firebase', newCardData);
     } catch (error) {

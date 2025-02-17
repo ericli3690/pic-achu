@@ -13,8 +13,8 @@ export function DisplayCard({currentCard={}, cardWidth, leftLocation, topLocatio
     async function reassembleImage() {
       const id = await getGroupID();
       let output = "";
-      for (let i = 0; i < currentCard.imageRefs.length; i++) {
-        const docRef = doc(db, 'allGroups', id, "images", currentCard.imageRefs[i]);
+      for (let i = 0; i < currentCard.imgRefs.length; i++) {
+        const docRef = doc(db, 'allGroups', id, "images", currentCard.imgRefs[i]);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           output += docSnap.data()['val'];
@@ -49,7 +49,7 @@ export function DisplayCard({currentCard={}, cardWidth, leftLocation, topLocatio
       <View style={{flexDirection: 'row'}}>
 
         <Text style={{marginLeft: cardWidth/11, marginTop: cardHeight/22, fontFamily: 'Futura', fontSize: cardWidth/13, color: 'black', fontWeight: 'bold'}}>
-          {currentCard.title}
+          {currentCard.name}
         </Text>
         <Text style={{flex: 1, marginRight: cardWidth/11, marginTop: cardHeight/20, textAlign:'right', fontFamily: 'Futura', fontSize: cardWidth/17, color: 'black'}}>
           {currentCard.health}
@@ -76,17 +76,17 @@ export function DisplayCard({currentCard={}, cardWidth, leftLocation, topLocatio
 
       <View style={{flexDirection: 'row'}}>
       <Text style={{marginLeft: cardWidth/10, marginTop: cardHeight/60, fontFamily: 'Futura', fontSize: cardWidth/18, color: 'black', fontWeight: 'bold'}}>
-        {currentCard.move1['title']}
+        {currentCard.move['title']}
       </Text>
       <Text style={{marginRight: cardWidth/10,textAlign:'right',flex:1, marginTop: cardHeight/60, fontFamily: 'Futura', fontSize: cardWidth/18, color: 'black', fontWeight: 'bold'}}>
-        {currentCard.move1['effect']}  {currentCard.move1['cost']}
+        {currentCard.move['effect']}  {currentCard.move['cost']}
       </Text>
       </View>
       
 
 
       <Text style={{marginLeft: cardWidth/10, marginRight: cardWidth/10, marginTop: 0, fontFamily: 'Futura', fontSize: cardWidth/25, color: '#777777'}}>
-        {currentCard.move1['description']}
+        {currentCard.move['description']}
       </Text>
       
 
@@ -95,4 +95,3 @@ export function DisplayCard({currentCard={}, cardWidth, leftLocation, topLocatio
     </ImageBackground>    
   );
 }
-  

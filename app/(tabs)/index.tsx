@@ -7,24 +7,27 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { LinearGradient } from "expo-linear-gradient";
 import { DisplayCard } from '@/components/displayCard';
+import { getCardsFromGroup } from '@/components/card';
+import { getGroupID } from '@/scripts/group';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/scripts/firebase';
+
+let subscriber = () => {}
 
 export default function HomeScreen() {
-  const [cardData, setCardData] = React.useState({});
-  useEffect(() => {
 
-  setCardData({ title: 'hi', 
-    description: 'descasdaisgfaigfuaysgdyuasgdiuasdgsayudfauysfdiuafsd', 
-    health: 5, 
-    imgRefs: ["AwgZm9Py6F4eMVFAQva3", "a4JOGbgXhDrlpjWnBwbT", "lWOOoThqBIxfZTrWbTQf", "UA5IeJbWCw7R6SeJIMjD"], 
-    cost: '4', 
-    move1: { cost: 3, description: 'move1arrsdasdabdsjhasdhavsjdhvasjdvajdshvajhsdvajhvsdajvdsaj', effect: 6, title: 'move1name', type: 'damage' }, 
-    move2: { cost: 4, description: 'move2', effect: 8, title: 'move2name', type: 'damage' }, 
-    owner: 'owner',
-    position: 'n/a' });
+  const [cardsData, setCardsData] = React.useState({});
+
+  useEffect(() => {
+    (async () => {
+      subscriber = onSnapshot(doc(db, 'allGroups', await getGroupID()), doc => {
+        if (doc.data()?.cards != null) {
+          setCardsData(doc.data()?.cards);
+        }
+      });
+    })();
   }, []);
 
-  
-    
   return (
     <LinearGradient colors={['#90ee90', '#e6ffe6']} style={styles.background}>
     <ScrollView style={styles.screen}>
@@ -36,10 +39,11 @@ export default function HomeScreen() {
  
         <Text style={styles.titleContainer}>My Deck</Text>
 
-
-        
-        {Object.keys(cardData).length != 0 && <DisplayCard currentCard={cardData} cardWidth={200} leftLocation={10} topLocation={10}/>}
-        
+        <ScrollView horizontal>
+          {Object.keys(cardsData).length > 0 && Object.entries(cardsData).map(([key, ele]) => {
+              return <DisplayCard key={key} currentCard={ele} cardWidth={200} leftLocation={10} topLocation={10}/>
+          })}
+        </ScrollView>
 
         <Button title="Change Deck" onPress= {() => {Alert.alert('hi')}} />
       
