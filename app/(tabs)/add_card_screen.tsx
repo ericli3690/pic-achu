@@ -199,6 +199,7 @@ export default function AddCardScreen() {
             onChangeMoveDesc("");
             onChangeMovePower(0);
             onChangeMoveCost(0);
+            onChangeMoveType("");
         }}
 
     />
