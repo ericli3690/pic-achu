@@ -10,6 +10,12 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import * as ImagePicker from "expo-image-picker";
 
+import * as FileSystem from 'expo-file-system';
+import { getCardsFromGroup } from '@/components/card';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { db } from '@/scripts/firebase';
+import { getGroupID } from '@/scripts/group';
+import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -26,6 +32,7 @@ export default function AddCardScreen() {
     useEffect(() => {onChangeMoveCost((+MovePower)/2 + +CardHealth/4);}, [MovePower, CardHealth]);
 
     const [CurrentCard, SetCurrentCard] = React.useState<{}>({});
+    const [displayFile, setDisplayFile] = React.useState("");
     const [file, setFile] = useState("");
     const [error, setError] = useState(null);
 
@@ -53,7 +60,9 @@ export default function AddCardScreen() {
 
                 // If an image is selected (not cancelled), 
                 // update the file state variable
-                setFile(result.assets[0].uri);
+                const base64 = (await FileSystem.readAsStringAsync(result.assets[0].uri, { encoding: 'base64' })).toString();
+                setFile(base64);
+                setDisplayFile(result.assets[0].uri);
 
                 // Clear any previous errors
                 setError(null);
@@ -97,20 +106,8 @@ export default function AddCardScreen() {
         
         
     
-        { file  !== "" && <Image source={{uri: file}}
+        { file  !== "" && <Image source={{uri: displayFile}}
         style={styles.image} />}
-    
-    <Text style={styles.text}>
-    {'\n'}
-    {"Name:"}
-    </Text>
-    <TextInput
-          style={styles.input}
-          onChangeText={onChangeMoveName}
-          value={MoveName}
-          placeholder=''
-          placeholderTextColor='#999999'
-        />
 
     <Text style={styles.text}>
     {'\n'}
@@ -195,6 +192,7 @@ export default function AddCardScreen() {
         onPress={() => {
             onChangeCardName("");
             setFile("");
+            setDisplayFile("");
             onChangeCardDesc("");
             onChangeCardHealth(0);
             onChangeMoveName("");
@@ -207,32 +205,47 @@ export default function AddCardScreen() {
 
     <Button
         title='Make Card'
-        onPress={() => 
-            {if (CardName != "" && CardDesc != "" && CardHealth != 0 && MoveName != "" && MoveDesc != "" && MovePower != 0 && MoveCost != 0) {
+        onPress={async () => 
+            {if (CardName != "" && CardHealth != 0 && MoveName != "" && MovePower != 0 && MoveCost != 0 && file != "") {
                 console.log("meow");
+
+                let referenceArray = [];
+                try {
+                    for (let i = 0; i < file.length; i+=1000000) {
+                        const docRef = await addDoc(collection(db, "allGroups", await getGroupID(), "images"), {
+                            'val': file.substring(i,i+1000000)
+                        });
+                        referenceArray.push(docRef.id);
+                    }
+                } catch (error) {
+                    Alert.alert("Oops: " + error);
+                }
+
                 const newCard = {
                     name: CardName,
                     description: CardDesc,
                     health: +CardHealth,
-                    imgRefs: [],
+                    imgRefs: referenceArray,
                     move: { cost: +MoveCost, description: MoveDesc, power: +MovePower, title: MoveName, type: MoveType },
                 };
-                SetCurrentCard(newCard);
-                updateCardData('fat person', newCard);
 
+                SetCurrentCard(newCard);
+                await updateCardData(uuidv4().toString(), newCard); // generate new unique id
 
                 Alert.alert('Card Created');
                 onChangeCardName("");
                 onChangeCardDesc("");
                 setFile("");
+                setDisplayFile("");
                 onChangeCardHealth(0);
                 onChangeMoveName("");
                 onChangeMoveDesc("");
+                onChangeMoveType("");
                 onChangeMovePower(0);
                 onChangeMoveCost(0);
             } 
             else {
-                Alert.alert('Please fill out all fields');
+                Alert.alert('Please fill out all fields!');
             }
 
         }}/>
