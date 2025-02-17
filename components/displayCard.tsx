@@ -13,8 +13,6 @@ export function DisplayCard({currentCard={}, cardWidth, leftLocation, topLocatio
     async function reassembleImage() {
       const id = await getGroupID();
       let output = "";
-      for (let i = 0; i < currentCard.imgRefs.length; i++) {
-        const docRef = doc(db, 'allGroups', id, "images", currentCard.imgRefs[i]);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           output += docSnap.data()['val'];
