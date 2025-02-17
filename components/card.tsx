@@ -5,34 +5,8 @@ import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { ListRenderItem } from 'react-native';
 import { getGroupID } from '@/scripts/group.js';
 
-// card type skeleton
-export type card = {
-	title: string,
-	description: string,
-	health: number,
-	imgString: string,
-	cost: string,
-	move1: {
-		cost: number,
-		description: string,
-		effect: number,
-		title: string,
-		type: string
-	},
-	move2: {
-		cost: number,
-		description: string,
-		effect: number,
-		title: string,
-		type: string
-	},
-    owner: string,
-	position: 'n/a' | 'deck' | 'hand' | 'board' | 'discord'  // Using union type for specific values
-}
-
-export async function getCardsFromGroup(sample_text: string) {
-    const id = await getGroupID();
-    const docRef = doc(db, 'allGroups', id);
+export async function getCardsFromGroup(group_id: string) {
+    const docRef = doc(db, 'allGroups', group_id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
         return docSnap.data()['cards'];
@@ -41,8 +15,27 @@ export async function getCardsFromGroup(sample_text: string) {
     }
   }
 
+export async function updateCardData(card_name: string, newCardData: any) {
+    console.log('updating card data in firebase so far...', newCardData);
+    try {
+        const docRef = doc(db, 'allGroups', await getGroupID());
+        const docSnap = await getDoc(docRef);
+        const currentCards = docSnap.data()?.cards;
+        console.log(currentCards, 'cardRef');
+        if (currentCards) {
+            currentCards[card_name] = newCardData;
+            await setDoc(docRef, { cards: currentCards });
+        } else {
+            console.log('No current cards found to update.');
+        }
+        console.log('updating card data in firebase', newCardData);
+    } catch (error) {
+        console.error('Error updating card data:', error);
+    }
+}
+
 export function CardStorage() {
-    let [cardData, setCardData] = useState([]);
+    const [cardData, setCardData] = useState([]);
 
 	useEffect(() => {
 		const fetchCards = async () => {
@@ -53,41 +46,4 @@ export function CardStorage() {
 
 		fetchCards();
 	}, []);
-
-    return {
-        // getter
-        getCardData: (index: number) => {
-            if (index == -1) {
-                return cardData;
-            }
-            return cardData[index];
-        },
-        // getter
-        setCardData: (index: number, newCardData: Map<String, any>, cardData: [Map<String, any>]) => {
-            cardData[index] = newCardData;
-            return cardData;
-        },
-        // setter
-        makeCardData: (newCardData: typeof cardData[number]) => {
-            cardData.push(newCardData);
-            return cardData;
-        },
-        // setter (double check this, smt smt firebase)
-        updateCardData: async (index: number, newCardData: typeof cardData[number]) => {
-            // setCardData(prevData => {
-            //     const newData = [...prevData] as typeof cardData; // Ensure newData is typed correctly
-            //     newData[index] = newCardData;
-            //     return newData;
-            // });
-            // Update the card data in Firebase
-            try {
-                const id = await getGroupID();
-                const cardRef = doc(db, 'allGroups', id, 'cards', index.toString());
-                console.log('updating card data in firebase', newCardData);
-                await setDoc(cardRef, newCardData);
-            } catch (error) {
-                console.log('Error updating card data in Firebase:', error);
-            }
-        }
-    }
 }

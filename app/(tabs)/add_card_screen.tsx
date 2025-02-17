@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Platform, Alert, Button, TextInput, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { card, CardStorage } from '@/components/card';
+import { updateCardData } from '@/components/card';
 import { LinearGradient } from "expo-linear-gradient";
 import { Animated } from "react-native";
 
@@ -10,36 +10,26 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import * as ImagePicker from "expo-image-picker";
 
-
-
+import { v4 as uuidv4 } from 'uuid';
 
 
 export default function AddCardScreen() {
     const [CardName, onChangeCardName] = React.useState("");
-    const [CardHealth, onChangeCardHealth] = React.useState("");
+    const [CardHealth, onChangeCardHealth] = React.useState(0);
     const [CardDesc, onChangeCardDesc] = React.useState("");
-    const [CardCost, onChangeCardCost] = React.useState("");
-    const [MoveName1, onChangeMoveName1] = React.useState("");
-    const [MoveName2, onChangeMoveName2] = React.useState("");
-    const [MoveDesc1, onChangeMoveDesc1] = React.useState("");
-    const [MoveDesc2, onChangeMoveDesc2] = React.useState("");
-    const [MoveType1, onChangeMoveType1] = React.useState("");
-    const [MoveType2, onChangeMoveType2] = React.useState("");
-    const [MovePower1, onChangeMovePower1] = React.useState("");
-    const [MovePower2, onChangeMovePower2] = React.useState("");
-    const [MoveCost1, onChangeMoveCost1] = React.useState(0);
-    const [MoveCost2, onChangeMoveCost2] = React.useState(0);
+    const [MoveName, onChangeMoveName] = React.useState("");
+    const [MoveDesc, onChangeMoveDesc] = React.useState("");
+    const [MoveType, onChangeMoveType] = React.useState("");
+    const [MovePower, onChangeMovePower] = React.useState(0);
+    const [MoveCost, onChangeMoveCost] = React.useState(0);
 
-    const [Card, SetCardData] = React.useState<card[]>([]);
+    useEffect(() => {onChangeMoveCost((+MovePower)/2 + +CardHealth/4);}, [MovePower, CardHealth]);
 
+    const [CurrentCard, SetCurrentCard] = React.useState<{}>({});
     const [file, setFile] = useState("");
-
     const [error, setError] = useState(null);
 
     const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
-    
-    useEffect(() => {onChangeMoveCost1((+MovePower1)/2);}, [MovePower1]);
-    useEffect(() => {onChangeMoveCost2((+MovePower2)/2);}, [MovePower2]);
 
     const pickImage = async () => {
         const { status } = await ImagePicker.
@@ -59,7 +49,6 @@ export default function AddCardScreen() {
             // the selected image
             const result =
                 await ImagePicker.launchImageLibraryAsync();
-
             if (!result.canceled) {
 
                 // If an image is selected (not cancelled), 
@@ -72,7 +61,6 @@ export default function AddCardScreen() {
         }
     };
 
-
   return (
     <LinearGradient colors={[ '#fff2d8','#F2D2BD']} style={styles.background}>
 
@@ -81,19 +69,25 @@ export default function AddCardScreen() {
       >
 
     <Text>
-    {'\n'}
-    {'\n'}
+    {'\n\n\n'}
     </Text>
 
       
     <ThemedText type="title" style={styles.titleContainer}>Make Card</ThemedText>
     
+    <Text>
+    {'\n'}
+    </Text>
+
+    <Text style={styles.text}>
+        Card Name:
+    </Text>
     
     <TextInput
           style={styles.input}
           onChangeText={onChangeCardName}
           value={CardName}
-          placeholder='Enter Card Name'
+          placeholder=''
           placeholderTextColor='#999999'
         />
     <Button
@@ -106,74 +100,94 @@ export default function AddCardScreen() {
         { file  !== "" && <Image source={{uri: file}}
         style={styles.image} />}
     
-    
+    <Text style={styles.text}>
+    {'\n'}
+    {"Name:"}
+    </Text>
+    <TextInput
+          style={styles.input}
+          onChangeText={onChangeMoveName}
+          value={MoveName}
+          placeholder=''
+          placeholderTextColor='#999999'
+        />
+
+    <Text style={styles.text}>
+    {'\n'}
+    {"Description:"}
+    </Text>
     <TextInput
           style={styles.input}
           onChangeText={onChangeCardDesc}
           value={CardDesc}
-          placeholder='Enter Card Description'
+          placeholder=''
           placeholderTextColor='#999999'
         />
-    <TextInput
-          style={styles.input}
-          onChangeText={onChangeCardHealth}
-          keyboardType='numeric'
-          value={CardHealth}
-          placeholder='Health'
-          placeholderTextColor='#999999'
-        />
-    <TextInput
-          style={styles.input}
-          onChangeText={onChangeMoveName1}
-          value={MoveName1}
-          placeholder='Move 1 Name'
-          placeholderTextColor='#999999'
-        />
-    <TextInput
-          style={styles.input}
-          onChangeText={onChangeMoveDesc1}
-          value={MoveDesc1}
-          placeholder='Move 1 Description'
-          placeholderTextColor='#999999'
-        />
-    <TextInput
-          style={styles.input}
-          onChangeText={onChangeMovePower1}
-          keyboardType='numeric'
-          value={MovePower1}
-          placeholder='Move 1 Power'
-          placeholderTextColor='#999999'
-        />
-    <Text style={styles.text}>
-        Move 1 Cost: {MoveCost1}
-    </Text>
 
+    <Text style={styles.text}>
+    {'\n'}
+    {"Health:"}
+    </Text>
     <TextInput
           style={styles.input}
-          onChangeText={onChangeMoveName2}
-          value={MoveName2}
-          placeholder='Move 2 Name'
+          onChangeText={(text) => onChangeCardHealth(Number(text))}
+          keyboardType='numeric'
+          value={CardHealth.toString()}
+          placeholder=''
           placeholderTextColor='#999999'
         />
     
+    <Text style={styles.text}>
+    {'\n'}
+    {"Move Name:"}
+    </Text>
     <TextInput
           style={styles.input}
-          onChangeText={onChangeMoveDesc2}
-          value={MoveDesc2}
-          placeholder='Move 2 Description'
-          placeholderTextColor='#999999'
-        />
-    <TextInput
-          style={styles.input}
-          onChangeText={onChangeMovePower2}
-          keyboardType='numeric'
-          value={MovePower2}
-          placeholder='Move 2 Power'
+          onChangeText={onChangeMoveName}
+          value={MoveName}
+          placeholder=''
           placeholderTextColor='#999999'
         />
 
     <Text style={styles.text}>
-        Move 2 Cost: {MoveCost2}
+    {'\n'}
+    {"Move Description:"}
+    </Text>
+    <TextInput
+          style={styles.input}
+          onChangeText={onChangeMoveDesc}
+          value={MoveDesc}
+          placeholder=''
+          placeholderTextColor='#999999'
+        />
+
+    <Text style={styles.text}>
+    {'\n'}
+    {"Move Power:"}
+    </Text>
+    <TextInput
+          style={styles.input}
+          onChangeText={(text) => onChangeMovePower(Number(text))}
+          keyboardType='numeric'
+          value={MovePower.toString()}
+          placeholder='Move Power'
+          placeholderTextColor='#999999'
+        />
+    
+    <Text style={styles.text}>
+    {'\n'}
+    {"Move Type:"}
+    </Text>
+    <TextInput
+          style={styles.input}
+          onChangeText={onChangeMoveType}
+          value={MoveType}
+          placeholder=''
+          placeholderTextColor='#999999'
+        />
+
+    <Text style={styles.text}>
+        Move Cost: {MoveCost}
     </Text>
 
     <Button
@@ -182,13 +196,11 @@ export default function AddCardScreen() {
             onChangeCardName("");
             setFile("");
             onChangeCardDesc("");
-            onChangeCardHealth("");
-            onChangeMoveName1("");
-            onChangeMoveDesc1("");
-            onChangeMovePower1("");
-            onChangeMoveName2("");
-            onChangeMoveDesc2("");
-            onChangeMovePower2("");
+            onChangeCardHealth(0);
+            onChangeMoveName("");
+            onChangeMoveDesc("");
+            onChangeMovePower(0);
+            onChangeMoveCost(0);
         }}
 
     />
@@ -196,28 +208,28 @@ export default function AddCardScreen() {
     <Button
         title='Make Card'
         onPress={() => 
-            {if (CardName != "" && CardDesc != "" && file != "" && CardHealth != "" && MoveName1 != "" && MoveDesc1 != "" && MovePower1 != "" && MoveName2 != "" && MoveDesc2 != "" && MovePower2 != "") {
-                SetCardData([{ title: CardName, 
-                    description: CardDesc, 
-                    health: +CardHealth, 
-                    imgString: file, 
-                    cost: CardCost, 
-                    move1: { cost: +MoveCost1, description: MoveDesc1, effect: +MovePower1, title: MoveName1, type: MoveType1 }, 
-                    move2: { cost: +MoveCost2, description: MoveDesc2, effect: +MovePower2, title: MoveName2, type: MoveType2 }, 
-                    owner: 'owner',
-                    position: 'n/a' }]);
+            {if (CardName != "" && CardDesc != "" && CardHealth != 0 && MoveName != "" && MoveDesc != "" && MovePower != 0 && MoveCost != 0) {
+                console.log("meow");
+                const newCard = {
+                    name: CardName,
+                    description: CardDesc,
+                    health: +CardHealth,
+                    imgRefs: [],
+                    move: { cost: +MoveCost, description: MoveDesc, power: +MovePower, title: MoveName, type: MoveType },
+                };
+                SetCurrentCard(newCard);
+                updateCardData('fat person', newCard);
+
 
                 Alert.alert('Card Created');
                 onChangeCardName("");
                 onChangeCardDesc("");
                 setFile("");
-                onChangeCardHealth("");
-                onChangeMoveName1("");
-                onChangeMoveDesc1("");
-                onChangeMovePower1("");
-                onChangeMoveName2("");
-                onChangeMoveDesc2("");
-                onChangeMovePower2("");
+                onChangeCardHealth(0);
+                onChangeMoveName("");
+                onChangeMoveDesc("");
+                onChangeMovePower(0);
+                onChangeMoveCost(0);
             } 
             else {
                 Alert.alert('Please fill out all fields');

@@ -91,7 +91,7 @@ export default function BattleScreen() {
 
 
   return (
-    <LinearGradient colors={['#FFFDD0', '#0000FF']} style={styles.background}>
+    <LinearGradient colors={[ '#0000FF', '#FFFDD0']} style={styles.background}>
 
     <ScrollView
         style={styles.screen}
@@ -172,7 +172,24 @@ export default function BattleScreen() {
 
 
 
+{OppButton ?<View>
 
+  <TouchableOpacity style={styles.Button}
+          onPress = {() => {
+            SetOppButton(false);
+          }}>
+            <Text style = {styles.text}>
+              Back to Field
+            </Text>
+            </TouchableOpacity>
+        
+        {Object.keys(cardData).length != 0 && <DisplayCard currentCard={cardData} cardWidth={0.8*screenWidth} leftLocation={0.1*screenWidth}/>}
+
+
+
+          
+
+</View> : <View>
 
 <Text style={styles.text}>
   Opponent's Hand 
@@ -184,9 +201,14 @@ export default function BattleScreen() {
 {oppHand.map((oppcard, index) => {
         return( 
         <View key={index}> 
-          
-      {Object.keys(cardData).length != 0 && <DisplayCard currentCard={oppcard.data} cardWidth={0.4*screenWidth} leftLocation={0.3*screenWidth}/>}
-
+          <TouchableOpacity style={styles.CardButton}
+          onPress = {() => {
+            SetOppButton(true);
+            setCardData(oppcard.data);
+          }}>
+      {Object.keys(cardData).length != 0 && <DisplayCard currentCard={oppcard.data} cardWidth={0.4*screenWidth}/>}
+      </TouchableOpacity>
+              
               
         </View>)} ) }
       </ScrollView>
@@ -213,12 +235,22 @@ export default function BattleScreen() {
         </View>)} ) }
 
   </ScrollView>
-
-
+          </View>
+        }
           </View>
           }
          
-     </View>
+      <TouchableOpacity style={styles.Button}
+      onPress = {() => {
+        Alert.alert("only nerds give up")
+        SetButtonPressed(false);
+        onChangeTrophies(Trophies - 1) ;
+      }}> 
+      <Text style={styles.buttonText}>
+          Give Up
+          </Text>
+          </TouchableOpacity>
+      </View>
        : 
        <View>
      <ThemedText type="title" style={styles.titleContainer}>READY TO DDDDUEL?</ThemedText>
@@ -247,16 +279,7 @@ export default function BattleScreen() {
           </View> }
 
  
-          <TouchableOpacity style={styles.Button}
-      onPress = {() => {
-        Alert.alert("only nerds give up")
-        SetButtonPressed(false);
-        onChangeTrophies(Trophies - 1) ;
-      }}> 
-      <Text style={styles.buttonText}>
-          Give Up
-          </Text>
-          </TouchableOpacity>
+      
 
 </ScrollView>
 </LinearGradient>
@@ -332,7 +355,7 @@ const styles = StyleSheet.create({
   text: {
     backgroundColor: 'transparent',
     fontSize: 30,
-    color: '#022ef0',
+    color: '#000000',
     textAlign: 'center',
 
   },

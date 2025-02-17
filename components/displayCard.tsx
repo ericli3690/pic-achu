@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, Image, StyleSheet, ScrollView, ImageBackground, Alert } from 'react-native';
-import { card, CardStorage } from '@/components/card';
+import { CardStorage } from '@/components/card';
 import { doc, getDoc } from 'firebase/firestore';
 import { getGroupID } from '@/scripts/group';
 import { db } from '@/scripts/firebase';
