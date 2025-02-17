@@ -40,35 +40,48 @@ export default function SettingsScreen() {
   }, [update]);
 
   return (
-    <LinearGradient colors={[ '#D3D3D3','#808080']} style={styles.background}>
+    <LinearGradient colors={['#A9A9A9', '#D3D3D3']} style={styles.background}>
     <ScrollView>
       <Text>
-        {'\n'}
-        {'\n'}
+        {'\n'
+        }
+        {'\n'
+        }
+        {'\n'
+        }
       </Text>
 
-        <Text style={styles.titleContainer}>Settings
-          {'\n'}
-        </Text>
+        <Text style={styles.titleContainer}>Settings</Text>
+        <Text>
+        {'\n'
+        }
+       
+      </Text>
 
 
- 
       {
         (currUser != null) ?
         <>
 
-          <Text>Current User: {currUser.displayName}</Text>
-          <Text>Current User Email: {currUser.email}</Text>
-          <Text>Current Joined Group: {currGroup}</Text>
+          <Text style={styles.text}>Current User: {currUser.displayName}</Text>
+          <Text style={styles.text}>Current User Email: {currUser.email}</Text>
+          <Text style={styles.text}>Current Joined Group: {currGroup}</Text>
 
-          <ThemedText type="title">Change Username:</ThemedText>
+          <Text>
+            {'\n'}
+            {'\n'}
+          </Text>
+
+          <Text style={styles.loginContainer}>Change Username:</Text>
           <TextInput
             style={styles.input}
             onChangeText={setDisplayName}
             value={displayName}
             placeholder='Enter New Username'
           />
-          <Button title="Update Username" onPress={async () => {
+
+
+          <TouchableOpacity onPress={async () => {
             if (auth.currentUser) {
               updateProfile(auth.currentUser, {
                 displayName: displayName,
@@ -77,11 +90,19 @@ export default function SettingsScreen() {
               }).catch((error) => {
                 Alert.alert("Oops: " + error);
               });
+              setDisplayName("");
             }
-          }} />
+          }} style={styles.ButtonContainer}>
+            <Text style={styles.text}>
+            Update Username
+            </Text>
+          </TouchableOpacity>
+          <Text>
+            {'\n'}
+          </Text>
 
-          <ThemedText type="title">Join a Group:</ThemedText>
-          <Text style={styles.text}>Current User: {currUser.email}</Text>
+
+
           <Text style={styles.loginContainer}>Join a Group:</Text>
           <TextInput
             style={styles.input}
@@ -89,41 +110,81 @@ export default function SettingsScreen() {
             value={joinGroupText}
             placeholder='Enter Group ID'
           />
-          <Button title="Join Group" onPress={async () => {
+
+          <TouchableOpacity onPress={async () => {
             await setGroupID(joinGroupText);
             setCurrGroup(joinGroupText);
-          }} />
+            setJoinGroupText("");
+          }} style={styles.ButtonContainer}>
+            <Text style={styles.text}>
+            Join Group
+            </Text>
+          </TouchableOpacity>
 
-          <ThemedText type="title">Create a New Group:</ThemedText>
+          <Text>
+            {'\n'}
+          </Text>
+
+        
+
+          <Text style={styles.loginContainer}>Create a New Group:</Text>
           <TextInput
             style={styles.input}
             onChangeText={setNewGroupText}
             value={newGroupText}
             placeholder='Enter Group ID'
           />
-          <Button title="Create Group" onPress={async () => {
+
+        <TouchableOpacity onPress={async () => {
             await setGroupID(newGroupText);
             setCurrGroup(newGroupText);
-          }} />
+            setNewGroupText("");
+          }} style={styles.ButtonContainer}>
+            <Text style={styles.text}>
+            Create Group
+            </Text>
+          </TouchableOpacity>
 
-          <Button title="Log Out" onPress={() => {
+          <Text>
+            {'\n'}
+          </Text>
+
+          <TouchableOpacity onPress={() => {
             signOut(auth).then(() => {
               setCurrUser(null);
             }).catch((error) => {
               Alert.alert("Oops: " + error);
             })
-          }} />
-
           }} style={styles.ButtonContainer}>
-              <Text style={styles.text}>Log Out</Text>
+            <Text style={styles.text}>
+            Log Out
+            </Text>
           </TouchableOpacity>
 
-          
+          <Text>
+            {'\n'}
+          </Text>
+
+
+
         </>
         :
         <>
+        
           <Text style={styles.loginContainer}>{isNewUser ? "Sign Up" : "Log In"}</Text>
-          <Button title={(isNewUser ? "Log In" : "Sign Up") + " Instead"} onPress={() => {setIsNewUser(!isNewUser)}} />
+
+          <Text>
+            {'\n'}
+          </Text>
+
+          <TouchableOpacity onPress={() => {setIsNewUser(!isNewUser)}} style={styles.ButtonContainer}>
+            <Text style={styles.text}>
+            {(isNewUser ? "Log In" : "Sign Up") + " Instead"}
+            </Text>
+          </TouchableOpacity>
+
+          
+
           <TextInput
             style={styles.input}
             onChangeText={setUsername}
@@ -137,7 +198,8 @@ export default function SettingsScreen() {
             secureTextEntry={true}
             placeholder='Enter Your Password'
           />
-          <Button title={isNewUser ? "Sign Up" : "Log In"} onPress={() => {
+
+          <TouchableOpacity onPress={() => {
             if (isNewUser) {
               createUserWithEmailAndPassword(auth, username, password)
                 .then((userCredential) => {
@@ -153,29 +215,42 @@ export default function SettingsScreen() {
                     Alert.alert("Oops: " + error);
                 });
             }
-          }} />
+          }} style={styles.ButtonContainer}>
+            <Text style={styles.text}>
+            {isNewUser ? "Sign Up" : "Log In"}
+            </Text>
+          </TouchableOpacity>
+
         </>
       }
+
+      <Text>
+        {'\n'}
+        {'\n'}
+        {'\n'}
+        {'\n'}
+      </Text>
     </ScrollView>
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+
   ButtonContainer:{
     elevation: 8,
-    backgroundColor: "#009688",
+    backgroundColor: "#6495ED",
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    marginLeft: 50,
-    marginRight: 50,
+    marginLeft: 70,
+    marginRight: 70,
   },
   text: {
       fontSize: 20,
       textAlign: 'center',
       fontFamily: 'Chalkboard SE',
-  color: '#999999',
+  color: '#636363',
   },
   background: {
       flex: 1,
