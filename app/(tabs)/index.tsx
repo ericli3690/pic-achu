@@ -9,6 +9,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { DisplayCard } from '@/components/displayCard';
 import { getCardsFromGroup } from '@/components/card';
 import { getGroupID } from '@/scripts/group';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/scripts/firebase';
+
+let subscriber = () => {}
 
 export default function HomeScreen() {
 
@@ -16,7 +20,11 @@ export default function HomeScreen() {
 
   useEffect(() => {
     (async () => {
-      setCardsData(await getCardsFromGroup(await getGroupID()));
+      subscriber = onSnapshot(doc(db, 'allGroups', await getGroupID()), doc => {
+        if (doc.data()?.cards != null) {
+          setCardsData(doc.data()?.cards);
+        }
+      });
     })();
   }, []);
 
