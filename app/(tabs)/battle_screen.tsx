@@ -30,17 +30,24 @@ export default function BattleScreen() {
 
   const [cardData, setCardData] = React.useState({});
 
+  const [attackName, changeAttackName] = React.useState("");
+
+  const [targetedCard, changeTarget] = React.useState({})
+
+  const [Turn, changeTurn] = React.useState(0);
+
+  const [ExistTarget, SetTarget] = React.useState(false);
+
   const oppHand = [
-    {id: 1,
+    {id: 1, //this is a placeholder Id
     name: 'yay',
     data: { 
-      title: 'BIG CHUNKY', 
+      name: 'BIG CHUNKY', 
       description: 'When he walks, gods tremble (good thing he does not walk)', 
       health: 69, 
       imgString: "placeholder", 
       cost: '4', 
-      move1: { cost: 3, description: 'OUCH', effect: 100, title:  'SMACK', type: 'damage' }, 
-      move2: { cost: 4, description: 'move2', effect: 8, title: 'move2name', type: 'damage' }, 
+      move: { cost: 3, description: 'OUCH', effect: 100, title:  'SMACK', type: 'damage' },
       owner: 'owner',
       position: 'n/a' }
     }
@@ -50,38 +57,36 @@ export default function BattleScreen() {
   
     setCardData(
       { 
-      title: 'HEHEHEH', 
+      name: 'HEHEHEH', 
       description: 'descasdaisgfaigfuaysgdyuasgdiuasdgsayudfauysfdiuafsd', 
       health: 5, 
       imgString: "placeholder", 
       cost: '4', 
-      move1: { cost: 3, description: 'move1arrsdasdabdsjhasdhavsjdhvasjdvajdshvajhsdvajhvsdajvdsaj', effect: 6, title: 'move1name', type: 'damage' }, 
-      move2: { cost: 4, description: 'move2', effect: 8, title: 'move2name', type: 'damage' }, 
+      move: { cost: 3, description: 'move1arrsdasdabdsjhasdhavsjdhvasjdvajdshvajhsdvajhvsdajvdsaj', effect: 6, title: 'move1name', type: 'damage' }, 
       owner: 'owner',
       position: 'n/a' });
     }, []);
   
     
-
+// Hand.data.move1.cost
+// Hand['data']['move1']['cost']
 
   const Hand = [
-    {id: 1,
+    {id: 2,
     card: "Mathboy",
-    data: { title: 'NERD', description: 'likes math too much', health: 5, imgString: "placeholder", 
+    data: { name: 'NERD', description: 'likes math too much', health: 5, imgString: "placeholder", 
       cost: '69', 
-      move1: { cost: 3, description: 'Talks about his love of fourier transformations', effect: 12, title: 'Math', type: 'damage' }, 
-      move2: { cost: 4, description: 'move2', effect: 8, title: 'move2name', type: 'damage' }, 
+      move: { cost: 3, description: 'Talks about his love of fourier transformations', effect: 12, title: 'Math', type: 'damage' }, 
       owner: 'owner',
       position: 'n/a' },
   
     },
 
-    {id: 2,
+    {id: 3,
       card: "LeChonk",
-      data: { title: 'LOLNO', description: 'descasdaisgfaigfuaysgdyuasgdiuasdgsayudfauysfdiuafsd', health: 5, imgString: "placeholder", 
+      data: { name: 'LOLNO', description: 'descasdaisgfaigfuaysgdyuasgdiuasdgsayudfauysfdiuafsd', health: 5, imgString: "placeholder", 
         cost: '4', 
-        move1: { cost: 3, description: 'move1arrsdasdabdsjhasdhavsjdhvasjdvajdshvajhsdvajhvsdajvdsaj', effect: 6, title: 'move1name', type: 'damage' }, 
-        move2: { cost: 4, description: 'move2', effect: 8, title: 'move2name', type: 'damage' }, 
+        move: { cost: 3, description: 'move1arrsdasdabdsjhasdhavsjdhvasjdvajdshvajhsdvajhvsdajvdsaj', effect: 6, title: 'move1name', type: 'damage' },
         owner: 'owner',
         position: 'n/a' },
     
@@ -102,75 +107,10 @@ export default function BattleScreen() {
     </Text>
 
     {IsButtonPressed ? 
-         <View>  
-          <Text style={styles.text}>
+      <View>  
+      <Text style={styles.text}>
          It's time to d-d-d-d-duel
-      </Text> 
-
-
-      
-
-      {PressedCard ?  
-      <View>
-        <ScrollView style={styles.screen}
-        horizontal> 
-        {oppHand.map((oppcard, index) => {
-        return( 
-        <View key={index}> 
-          
-      {Object.keys(cardData).length != 0 && <DisplayCard currentCard={oppcard.data} cardWidth={0.4*screenWidth} leftLocation={0.3*screenWidth}/>}
-
-              
-        </View>)} ) }
-      </ScrollView>
-
-        <Text style={styles.text}>
-
-        </Text>
-      {Object.keys(cardData).length != 0 && <DisplayCard currentCard={cardData} cardWidth={0.4*screenWidth} leftLocation={0.3*screenWidth}/>}
-      <TouchableOpacity style={styles.Button}
-      onPress = {() => {SetAttackButton(!AttackButton);}}>
-          <Text style={styles.buttonText}>
-          Attack!
-          </Text>
-          </TouchableOpacity>
-      
-      <TouchableOpacity style={styles.Button}
-      onPress = {() => {SetPassButton(!PassButton);}}>
-          <Text style={styles.buttonText}>
-          Do nothing!
-          </Text>
-          </TouchableOpacity>
-
-        <TouchableOpacity style={styles.Button}
-          onPress = {() => {SetCardPressed(false);}}>
-              <Text style={styles.buttonText}>
-              Switch Card
-              </Text>
-              </TouchableOpacity>
-
-          {AttackButton ? <View>
-            <Text style={styles.text}>
-         YOU SPANKED YOUR OPPONENT 
-         {'\n'}
-         +50 DAMAGE
-         {'\n'}
-         Waiting on opponent!
-
-      </Text> 
-          </View> : <View></View>}
-          {PassButton ? <View>
-            <Text style={styles.text}> YOU GOT SPANKED 
-            {'\n'}
-            -50 HP
-            </Text>
-          </View> : <View></View>}
-          </View>
-          :
-
-          <View>
-
-
+      </Text>
 
 {OppButton ?<View>
 
@@ -183,13 +123,145 @@ export default function BattleScreen() {
             </Text>
             </TouchableOpacity>
         
-        {Object.keys(cardData).length != 0 && <DisplayCard currentCard={cardData} cardWidth={0.8*screenWidth} leftLocation={0.1*screenWidth}/>}
+  {Object.keys(cardData).length != 0 && <DisplayCard currentCard={cardData} cardWidth={0.8*screenWidth} leftLocation={0.1*screenWidth}/>}
 
 
 
           
 
-</View> : <View>
+</View> 
+: 
+
+<View>
+
+{PressedCard ?  
+      <View>
+
+        
+
+        {AttackButton ? 
+          <View>
+            <ScrollView style={styles.screen} horizontal> 
+        {oppHand.map((oppcard, index) => {
+        return( 
+        <View key={index}> 
+          
+          <TouchableOpacity style={styles.CardButton}
+          onPress = {() => {
+            SetTarget(true);
+            changeTarget(oppcard.data);
+          }}>
+
+      {Object.keys(cardData).length != 0 && <DisplayCard currentCard={oppcard.data} cardWidth={0.4*screenWidth}/>}
+
+      </TouchableOpacity>
+              
+          
+          
+
+
+        </View>)} ) }
+      </ScrollView>
+
+    {Object.keys(cardData).length != 0 && <DisplayCard currentCard={cardData} cardWidth={0.4*screenWidth} leftLocation={0.3*screenWidth}/>}
+
+
+      {ExistTarget ? <View>
+                <Text style={styles.text}>
+                  You attacked {targetedCard.name} with {cardData.move.title}
+
+                </Text>
+                <TouchableOpacity style={styles.Button}
+          onPress = {() => {
+            SetPassButton(true);
+            SetAttackButton(false);
+            SetTarget(false);
+          }}>
+            
+          <Text style={styles.buttonText}>
+          Pass
+          </Text>
+
+          </TouchableOpacity>
+              </View>
+              
+              :
+              
+              <View>
+              <TouchableOpacity style={styles.Button}
+              onPress = {() =>
+            {SetAttackButton(false);
+            SetTarget(false);}}>
+
+          <Text style={styles.buttonText}>
+          Change Targets
+          </Text>
+          </TouchableOpacity>
+
+
+
+                </View>}
+         
+
+          </View> : 
+
+          <View>
+            
+          <ScrollView style={styles.screen}
+        horizontal> 
+        {oppHand.map((oppcard, index) => {
+        return( 
+        <View key={index}> 
+          
+          <TouchableOpacity style={styles.CardButton}
+          onPress = {() => {
+            SetOppButton(true);
+            changeTarget(oppcard.id);
+          }}>
+      {Object.keys(cardData).length != 0 && <DisplayCard currentCard={oppcard.data} cardWidth={0.4*screenWidth}/>}
+      </TouchableOpacity>
+              
+        </View>)} ) }
+      </ScrollView>
+
+
+      {Object.keys(cardData).length != 0 && <DisplayCard currentCard={cardData} cardWidth={0.4*screenWidth} leftLocation={0.3*screenWidth}/>}
+      <TouchableOpacity style={styles.Button}
+      
+      onPress = {() => {SetAttackButton(true);}}>
+          <Text style={styles.buttonText}>
+          {attackName}
+          </Text>
+          </TouchableOpacity>
+      
+      <TouchableOpacity style={styles.Button}
+      onPress = {() => {SetPassButton(!PassButton);}}>
+          <Text style={styles.buttonText}>
+          Do nothing!
+          </Text>
+          </TouchableOpacity>
+      
+          <TouchableOpacity style={styles.Button}
+          onPress = {() => {SetCardPressed(false);}}>
+              <Text style={styles.buttonText}>
+              Switch Card
+              </Text>
+              </TouchableOpacity>
+              
+            
+            
+            </View>}
+          {PassButton ? <View>
+            <Text style={styles.text}> YOU GOT Destroyed
+            {'\n'}
+            -50 HP
+            </Text>
+          </View> : <View></View>}
+
+          </View>
+          :
+
+          <View>
 
 <Text style={styles.text}>
   Opponent's Hand 
@@ -227,6 +299,7 @@ export default function BattleScreen() {
           onPress = {() => {
             SetCardPressed(true);
             setCardData(handcard.data);
+            changeAttackName(handcard.data.move.title);
           }}>
               
               {Object.keys(cardData).length != 0 && <DisplayCard currentCard={handcard.data} cardWidth={0.4*screenWidth}/>}
@@ -245,6 +318,10 @@ export default function BattleScreen() {
         Alert.alert("only nerds give up")
         SetButtonPressed(false);
         onChangeTrophies(Trophies - 1) ;
+        SetAttackButton(false);
+        SetOppButton(false);
+        SetCardPressed(false);
+
       }}> 
       <Text style={styles.buttonText}>
           Give Up
@@ -252,6 +329,7 @@ export default function BattleScreen() {
           </TouchableOpacity>
       </View>
        : 
+
        <View>
      <ThemedText type="title" style={styles.titleContainer}>READY TO DDDDUEL?</ThemedText>
 
@@ -260,6 +338,7 @@ export default function BattleScreen() {
     {'\n'}
     </Text>
     
+
 
     <Text>
     {'\n'}
@@ -280,6 +359,7 @@ export default function BattleScreen() {
 
  
       
+          
 
 </ScrollView>
 </LinearGradient>
