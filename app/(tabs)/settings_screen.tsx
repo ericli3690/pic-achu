@@ -118,7 +118,7 @@ export default function SettingsScreen() {
             style={styles.input}
             onChangeText={setUsername}
             value={username}
-            placeholder='Enter Your Username'
+            placeholder='Enter Your Email'
           />
           <TextInput
             style={styles.input}

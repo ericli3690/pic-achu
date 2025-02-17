@@ -18,7 +18,7 @@ export async function getCardsFromGroup(group_id: string) {
 export async function updateCardData(card_name: string, newCardData: any) {
     console.log('updating card data in firebase so far...', newCardData);
     try {
-        const docRef = doc(db, 'allGroups', 'PqS0D76ildkvGidUCPpz');
+        const docRef = doc(db, 'allGroups', await getGroupID());
         const docSnap = await getDoc(docRef);
         const currentCards = docSnap.data()?.cards;
         console.log(currentCards, 'cardRef');
