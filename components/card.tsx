@@ -22,16 +22,20 @@ export async function updateCardData(card_name: string, newCardData: any) {
         const docSnap = await getDoc(docRef);
         const currentCards = docSnap.data()?.cards;
         console.log(currentCards, 'cardRef');
-        currentCards[card_name] = newCardData;
+        if (currentCards) {
+            currentCards[card_name] = newCardData;
+            await setDoc(docRef, { cards: currentCards });
+        } else {
+            console.log('No current cards found to update.');
+        }
         console.log('updating card data in firebase', newCardData);
-        await setDoc(docRef, currentCards);
     } catch (error) {
-        console.log('Error updating card data in Firebase:', error);
+        console.error('Error updating card data:', error);
     }
 }
 
 export function CardStorage() {
-    let [cardData, setCardData] = useState([]);
+    const [cardData, setCardData] = useState([]);
 
 	useEffect(() => {
 		const fetchCards = async () => {
