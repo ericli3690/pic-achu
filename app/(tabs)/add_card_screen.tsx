@@ -130,9 +130,9 @@ export default function AddCardScreen() {
     </Text>
     <TextInput
           style={styles.input}
-          onChangeText={onChangeCardHealth}
+          onChangeText={(text) => onChangeCardHealth(Number(text))}
           keyboardType='numeric'
-          value={CardHealth}
+          value={CardHealth.toString()}
           placeholder=''
           placeholderTextColor='#999999'
         />
@@ -196,7 +196,7 @@ export default function AddCardScreen() {
             onChangeCardName("");
             setFile("");
             onChangeCardDesc("");
-            onChangeCardHealth("");
+            onChangeCardHealth(0);
             onChangeMoveName("");
             onChangeMoveDesc("");
             onChangeMovePower(0);
@@ -208,7 +208,7 @@ export default function AddCardScreen() {
     <Button
         title='Make Card'
         onPress={() => 
-            {if (CardName != "" && CardDesc != "" && CardHealth != "" && MoveName != "" && MoveDesc != "" && MovePower != 0 && MoveCost != 0) {
+            {if (CardName != "" && CardDesc != "" && CardHealth != 0 && MoveName != "" && MoveDesc != "" && MovePower != 0 && MoveCost != 0) {
                 console.log("meow");
                 const newCard = {
                     name: CardName,
