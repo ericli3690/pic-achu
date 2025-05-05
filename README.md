@@ -1,4 +1,4 @@
-# pic-achu
+# Pic-achu
 Create custom Pokemon-style cards with your friends!
 
 ## Running the App
